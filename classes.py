@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-
+#Nuova
 # Object for Historical Fixed Rate (in Murex3 --> Published)
 class historical_fixed_rate(object):
     def __init__(self, name, reference_date = None, currency = None, underlying = None):
