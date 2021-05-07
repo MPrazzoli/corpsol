@@ -103,7 +103,7 @@ def rate_interpoletor(interpolation_type, x_interpolation, y_interpolation, date
     return rate_interpolated
 
 # ESTIMATION RATE FUNCTION
-def estimation_rate_function(dataframe_curve, date_fixing_start, date_fixing_end, ref_date): # da passare i fixed rate !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+def estimation_rate_function(dataframe_curve, date_fixing_start, date_fixing_end, ref_date, fixed_value): # da passare i fixed rate 
     date_curve_number = date_to_ordinal( dataframe_curve['DATE'])      
     date_fixing_start_number = date_to_ordinal(date_fixing_start)
     date_fixing_end_number = date_to_ordinal(date_fixing_end)
@@ -124,9 +124,9 @@ def estimation_rate_function(dataframe_curve, date_fixing_start, date_fixing_end
     estimated_rate = []
     for i, date in enumerate(date_fixing_start_number):
         if date <= ref_date_number[0] : 
-            estimated_rate.append(0) # bisogna mettere il rate che fa riferimento al sottostante !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            estimated_rate.append(fixed_value / 100) # bisogna mettere il rate che fa riferimento al sottostante !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         else:
-            estimated_rate.append((discount_start[i] / discount_end[i] - 1) / ((date_fixing_end_number[i] - date) / 360)) # convenzione per i discount dell'EURIBOR è act/360
+            estimated_rate.append(round((discount_start[i] / discount_end[i] - 1) / ((date_fixing_end_number[i] - date) / 360),4)) # convenzione per i discount dell'EURIBOR è act/360
     return estimated_rate
 
 # DISCOUNT RATE FUNCTION
@@ -145,5 +145,5 @@ def discount_rate_function(dataframe_curve, ref_date, dataframe_schedule):
     discount_settlement = exp(-settlement_date_rate/ 100 * ((settlement_date_number[0] - ref_date_number[0]) / 365))
     discount_rates = []
     for discount in discount_list:
-        discount_rates.append(discount / discount_settlement)
+        discount_rates.append(round((discount / discount_settlement),4))
     return discount_rates
